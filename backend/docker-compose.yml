@@ -1,0 +1,21 @@
+version: '3'
+services:
+  nginx:
+    container_name: nginx
+    image: envride.azurecr.io/nginx:latest
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+
+  app:
+    image: envride.azurecr.io/app:latest
+    restart: always
+    expose:
+      - "8090"
+
+  otherapp:
+    image: envride.azurecr.io/otherapp:latest
+    restart: always
+    expose:
+      - "8091"
