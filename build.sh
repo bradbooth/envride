@@ -21,18 +21,18 @@ fi
 # App-service
 cd app-service/
 mvn package -f pom.xml
-docker build -f Dockerfile -t envride.azurecr.io/app:latest .
+docker build -f Dockerfile -t envrideRegistry.azurecr.io/app:latest .
 cd ..
 
 # App-service
 cd otherapp-service/
 mvn package -f pom.xml
-docker build -f Dockerfile -t envride.azurecr.io/otherapp:latest .
+docker build -f Dockerfile -t envrideRegistry.azurecr.io/otherapp:latest .
 cd ..
 
 # Front-end
 cd frontend/
-docker build -f Dockerfile -t envride.azurecr.io/nginx:latest .
+docker build -f Dockerfile -t envrideRegistry.azurecr.io/nginx:latest .
 cd ..
 
 
