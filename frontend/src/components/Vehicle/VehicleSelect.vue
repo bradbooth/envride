@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="vehicle-options-container">
         Year
         <select class="form-control" v-model="selection.year" @change="yearChanged">
             <option v-for="year in vehicles.years" :value="year.text" :key="year.text">
@@ -28,9 +28,7 @@
             </option>
         </select>
 
-        <textarea rows="15" cols="100" v-model="selection.data">
-
-        </textarea>
+        <!-- <textarea rows="15" cols="100" v-model="selection.data"></textarea> -->
 
     </div>
 </template>
@@ -118,5 +116,9 @@ export default {
 </script>
 
 <style>
+
+.vehicle-options-container {
+    padding: 30px;
+}
 
 </style>

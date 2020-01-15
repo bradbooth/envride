@@ -2,18 +2,21 @@
   <div>
 
     <VehicleSelect />
+    <Map />
 
   </div>
 </template>
 
 <script>
 
-import VehicleSelect from './vehicle/VehicleSelect'
+import VehicleSelect from './Vehicle/VehicleSelect'
+import Map from './Map/Map'
 
 export default {
-  name: 'HelloWorld',
+  name: 'Main',
   components: {
-    VehicleSelect
+    VehicleSelect,
+    Map
   },
   data () {
     return {

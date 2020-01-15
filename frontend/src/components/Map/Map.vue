@@ -79,18 +79,4 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-.search-to {
-    position: absolute;
-    z-index: 100;
-    top: 30px;
-    left: 20px;
-}
-
-.search-from {
-    position: absolute;
-    z-index: 100;
-    top: 30px;
-    left: 400px;
-}
-
 </style>
