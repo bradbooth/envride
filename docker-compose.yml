@@ -8,9 +8,9 @@ services:
       - 80:80
       - 443:443
 
-  app:
-    container_name: app
-    image: envrideRegistry.azurecr.io/app:latest
+  map-service:
+    container_name: map
+    image: envrideRegistry.azurecr.io/map-service:latest
     restart: always
     expose:
       - "8090"

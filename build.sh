@@ -18,13 +18,13 @@ if ! [ -x "$(command -v mvn)" ]; then
 fi
 
 
-# App-service
-cd app-service/
+# map-service
+cd map-service/
 mvn package -f pom.xml
-docker build -f Dockerfile -t envrideRegistry.azurecr.io/app:latest .
+docker build -f Dockerfile -t envrideRegistry.azurecr.io/map-service:latest .
 cd ..
 
-# App-service
+# otherapp-service
 cd otherapp-service/
 mvn package -f pom.xml
 docker build -f Dockerfile -t envrideRegistry.azurecr.io/otherapp:latest .
