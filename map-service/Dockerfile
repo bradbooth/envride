@@ -8,6 +8,9 @@ RUN mvn -f /usr/src/app/pom.xml clean package
 FROM openjdk:8-jdk-alpine
 COPY --from=build /usr/src/app/target/*.jar app.jar
 VOLUME /tmp
-EXPOSE 8091
+EXPOSE 8090
+
+ARG GOOGLE_MAPS_API_KEY
+ENV GOOGLE_MAPS_API_KEY $GOOGLE_MAPS_API_KEY
 
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
