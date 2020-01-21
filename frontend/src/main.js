@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -12,14 +13,14 @@ Vue.config.productionTip = false
 Vue.use({
   install (Vue) {
     Vue.prototype.$api = axios.create({
-      baseURL: 'http://localhost/api/'
+      // baseURL: 'http://localhost/api/'
     })
   }
 })
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyCnjsjbYDeHo1xWNQn7qfjLkIKT1kcur80', // This can be public
+    key: process.env.GOOGLE_MAPS_API_KEY,
     libraries: 'places', // This is required if you use the Autocomplete plugin
     // OR: libraries: 'places,drawing'
     // OR: libraries: 'places,drawing,visualization'

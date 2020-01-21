@@ -20,13 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootApplication
 @RestController
 public class WebApplication {
-
-	// This can be public
-	private static String API_KEY = "AIzaSyCnjsjbYDeHo1xWNQn7qfjLkIKT1kcur80";
 
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(WebApplication.class);
@@ -40,7 +38,7 @@ public class WebApplication {
 	public static String getDirections(@RequestParam String origin, @RequestParam String destination) {
 
 		GeoApiContext context = new GeoApiContext.Builder()
-												 .apiKey(API_KEY)
+												 .apiKey(System.getenv("GOOGLE_MAPS_API_KEY"))
 												 .build();
 
 		DirectionsApiRequest apiRequest = DirectionsApi.newRequest(context);

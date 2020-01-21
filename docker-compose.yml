@@ -4,6 +4,11 @@ services:
     container_name: nginx
     image: envrideRegistry.azurecr.io/nginx:latest
     restart: always
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+      args:
+        GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY_FRONTEND}
     ports:
       - 80:80
       - 443:443
@@ -12,6 +17,11 @@ services:
     container_name: maps
     image: envrideRegistry.azurecr.io/maps:latest
     restart: always
+    build:
+      context: ./map-service
+      dockerfile: ./Dockerfile
+      args:
+        GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY_BACKEND}
     expose:
       - "8090"
 
@@ -19,5 +29,8 @@ services:
     container_name: otherapp
     image: envrideRegistry.azurecr.io/otherapp:latest
     restart: always
+    build:
+      context: ./otherapp-service
+      dockerfile: ./Dockerfile
     expose:
       - "8091"
