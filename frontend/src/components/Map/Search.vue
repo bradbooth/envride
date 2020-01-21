@@ -12,11 +12,12 @@
 <script>
 export default {
     name: 'Search',
-    props: ['placeholder'],
+    props: {
+      placeholder: { type: String, default: '' }
+    },
     data(){
         return {
            search: "",
-           placeholder: ""
         }
     },
     methods: {
@@ -32,6 +33,7 @@ export default {
     border: 5px solid black;
     border-radius: 25px;
     padding: 10px 15px;
+    margin: 10px;
     font-size: 20px;
     z-index: 100;
   }

@@ -11,6 +11,13 @@
         :placeholder="'Destination'"
       />
 
+      <button 
+        class="search-button"
+        @click="search"
+      >
+        Search
+      </button>
+
       <GmapMap
         ref="mapRef"
         :center="{lat:43.7181557, lng:-79.5181401}"
@@ -19,17 +26,13 @@
         map-type-id="terrain"
         style="width: 100%; height: 98vh"
       >
-        <!-- <DirectionsRenderer
-          v-if="directions"
-          :directions="directions"
-          :from="destination" :to="center"
-        /> -->
 
         <gmap-polyline 
           v-bind:path.sync="path" 
           v-bind:options="{ strokeColor:'#008000'}">
         </gmap-polyline>
       </GmapMap>
+
   </div>
 </template>
 
@@ -42,7 +45,7 @@ export default {
   name: 'HelloWorld',
   components: {
       Search
-    },
+  },
   data() {
     return {
       directions: null,
@@ -57,20 +60,23 @@ export default {
       }
     }
   },
-  mounted () {
-
-    this.$api.get('app').then( 
-      (res) => {
-          this.path = res.data
-      }
-    )
-  },
   methods: {
       updateOrigin(event){
           this.origin = event
       },
+
       updateDestination(event){
           this.destination = event
+      },
+
+      search(){
+        if ( this.origin && this.destination ){
+          this.$api.get(`app/directions/?origin=${this.origin}&destination=${this.destination}`).then( 
+            (res) => {
+                this.path = res.data
+            }
+          )
+        }
       }
   }
 }
@@ -78,5 +84,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+  .search-button {
+    width: 100px;
+    height: 30px;
+    margin: 10px;
+  }
 
 </style>

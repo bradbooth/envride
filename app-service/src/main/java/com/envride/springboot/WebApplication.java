@@ -5,13 +5,16 @@ import com.google.gson.GsonBuilder;
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
-import com.google.maps.model.*;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.LatLng;
+import com.google.maps.model.TravelMode;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -22,8 +25,10 @@ import java.util.List;
 @RestController
 public class WebApplication {
 
+	// This can be public
+	private static String API_KEY = "AIzaSyCnjsjbYDeHo1xWNQn7qfjLkIKT1kcur80";
+
 	public static void main(String[] args) {
-		// google maps api key AIzaSyD_pxiHSjyGyHIzkikD8VDisYTqkJC0JQw
 		SpringApplication app = new SpringApplication(WebApplication.class);
         app.setDefaultProperties(Collections
           .singletonMap("server.port", "8090"));
@@ -31,21 +36,27 @@ public class WebApplication {
 	}
 
 	@CrossOrigin()
-	@RequestMapping("/")
-	public static String Hello() {
+	@RequestMapping("/directions")
+	public static String getDirections(@RequestParam String origin, @RequestParam String destination) {
 
 		GeoApiContext context = new GeoApiContext.Builder()
-				.apiKey("AIzaSyD_pxiHSjyGyHIzkikD8VDisYTqkJC0JQw")
-				.build();
+												 .apiKey(API_KEY)
+												 .build();
 
 		DirectionsApiRequest apiRequest = DirectionsApi.newRequest(context);
-		apiRequest.origin("Toronto");
-		apiRequest.destination("Mississauga");
+		apiRequest.origin(origin);
+		apiRequest.destination(destination);
 		apiRequest.mode(TravelMode.DRIVING);
 
-		DirectionsResult res = null;
+		DirectionsResult response;
 		try {
-			res = apiRequest.await();
+
+			response = apiRequest.await();
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			List<LatLng> pathPoints = response.routes[0].overviewPolyline.decodePath();
+			System.out.println(gson.toJson(pathPoints));
+			return gson.toJson(pathPoints);
+
 		} catch (ApiException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
@@ -54,12 +65,7 @@ public class WebApplication {
 			e.printStackTrace();
 		}
 
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		List<LatLng> pathPoints = res.routes[0].overviewPolyline.decodePath();
-		System.out.println(gson.toJson(pathPoints));
-
-
-		return gson.toJson(pathPoints);
+		return "Error: Unable to retrieve directions";
 	}
 
 
