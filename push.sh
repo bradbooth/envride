@@ -6,5 +6,5 @@ docker login envrideRegistry.azurecr.io
 sh build.sh
 
 docker push envrideRegistry.azurecr.io/nginx:latest
-docker push envrideRegistry.azurecr.io/map-service:latest
+docker push envrideRegistry.azurecr.io/maps:latest
 docker push envrideRegistry.azurecr.io/otherapp:latest

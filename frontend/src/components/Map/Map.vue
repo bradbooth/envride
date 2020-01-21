@@ -71,7 +71,7 @@ export default {
 
       search(){
         if ( this.origin && this.destination ){
-          this.$api.get(`map/directions/?origin=${this.origin}&destination=${this.destination}`).then( 
+          this.$api.get(`maps/directions/?origin=${this.origin}&destination=${this.destination}`).then( 
             (res) => {
                 this.path = res.data
             }

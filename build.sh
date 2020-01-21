@@ -21,7 +21,7 @@ fi
 # map-service
 cd map-service/
 mvn package -f pom.xml
-docker build -f Dockerfile -t envrideRegistry.azurecr.io/map-service:latest .
+docker build -f Dockerfile -t envrideRegistry.azurecr.io/maps:latest .
 cd ..
 
 # otherapp-service
