@@ -24,4 +24,4 @@ fi
 docker-compose down
 docker-compose build
 
-echo "\nDone:\nRun 'docker-compose up' and visit localhost in a browser to begin.\n"Chicago
+echo "\nDone:\nRun 'docker-compose up' and visit localhost in a browser to begin.\n"
