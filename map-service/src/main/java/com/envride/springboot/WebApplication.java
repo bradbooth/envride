@@ -2,11 +2,13 @@ package com.envride.springboot;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 
@@ -48,12 +50,20 @@ public class WebApplication {
 
 		DirectionsResult response;
 		try {
-
+			// Retrieve api response
 			response = apiRequest.await();
+
+			// Get first route returned
+			DirectionsRoute firstRoute = response.routes[0];
+			List<LatLng> pathPoints = firstRoute.overviewPolyline.decodePath();
+			float distanceInMeters = firstRoute.legs[0].distance.inMeters;
+
+			// Build response to be sent back
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			List<LatLng> pathPoints = response.routes[0].overviewPolyline.decodePath();
-			System.out.println(gson.toJson(pathPoints));
-			return gson.toJson(pathPoints);
+			JsonObject builtResponse = new JsonObject();
+			builtResponse.addProperty("distance", distanceInMeters);
+			builtResponse.addProperty("coordinates", gson.toJson(pathPoints));
+			return gson.toJson(builtResponse);
 
 		} catch (ApiException e) {
 			e.printStackTrace();
