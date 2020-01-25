@@ -1,7 +1,6 @@
 <template>
   <div>
 
-    <VehicleSelect />
     <Map />
 
   </div>

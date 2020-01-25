@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -37,11 +39,19 @@ public class WebApplication {
 
 	@CrossOrigin()
 	@RequestMapping("/directions")
-	public static String getDirections(@RequestParam String origin, @RequestParam String destination) {
+	public static String getDirections(@RequestParam String origin, @RequestParam String destination, @RequestParam String vehicleInfo) {
+
+
+		Map<String, String> vehicleInfoMap = new Gson().fromJson(vehicleInfo, Map.class);
+
+		Double co2TailpipeGpm = Double.parseDouble(vehicleInfoMap.get("co2TailpipeGpm"));
+
 
 		GeoApiContext context = new GeoApiContext.Builder()
-												 .apiKey(System.getenv("GOOGLE_MAPS_API_KEY"))
+												 .apiKey("AIzaSyDetrDIsCKmqpgIar_GGhCL4PgflfyBkLw")
 												 .build();
+
+
 
 		DirectionsApiRequest apiRequest = DirectionsApi.newRequest(context);
 		apiRequest.origin(origin);
@@ -61,7 +71,8 @@ public class WebApplication {
 			// Build response to be sent back
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			JsonObject builtResponse = new JsonObject();
-			builtResponse.addProperty("distance", distanceInMeters);
+			builtResponse.addProperty("distanceInMeters", distanceInMeters);
+			builtResponse.addProperty("routeCo2InGrams", getRouteCO2(co2TailpipeGpm, distanceInMeters));
 			builtResponse.addProperty("coordinates", gson.toJson(pathPoints));
 			return gson.toJson(builtResponse);
 
@@ -74,6 +85,18 @@ public class WebApplication {
 		}
 
 		return "Error: Unable to retrieve directions";
+	}
+
+	private static String getRouteCO2(Double co2TailpipeGpm, float distanceInMeters){
+
+		// Convert
+		double distanceInMiles = metersToMiles(distanceInMeters);
+		double co2GTotal = co2TailpipeGpm * distanceInMiles;
+		return String.valueOf(co2GTotal);
+	}
+
+	private static double metersToMiles(float meters){
+		return meters / 1609;
 	}
 
 

@@ -1,5 +1,10 @@
 <template>
   <div>
+
+      <VehicleSelect 
+        v-on:vehicle-selected="updateVehicleInfo"
+      />
+
       <Search 
         class="search-to" 
         v-on:update-search="updateOrigin"
@@ -17,6 +22,12 @@
       >
         Search
       </button>
+
+      <div>
+        <h4 v-if="distance">Distance:{{distance}} meters</h4>
+        <h4 v-if="routeCo2">Trip CO2:{{routeCo2}} grams </h4>
+      </div>
+
 
       <GmapMap
         ref="mapRef"
@@ -40,11 +51,13 @@
 
 import { mapStyle } from './MapStyle'
 import Search from './Search'
+import VehicleSelect from '../Vehicle/VehicleSelect'
 
 export default {
   name: 'HelloWorld',
   components: {
-      Search
+      Search,
+      VehicleSelect
   },
   data() {
     return {
@@ -52,15 +65,22 @@ export default {
       origin: "",
       destination: "",
       path: [],
+      distance: "",
+      routeCo2: "",
       options: {
         disableDefaultUi: true,
         streetViewControl: false,
         mapTypeControl: false,
         styles: mapStyle
-      }
+      },
     }
   },
   methods: {
+      
+      updateVehicleInfo(event){
+        this.vehicleInfo = event
+      },
+      
       updateOrigin(event){
           this.origin = event
       },
@@ -71,9 +91,15 @@ export default {
 
       search(){
         if ( this.origin && this.destination ){
-          this.$api.get(`api/maps/directions/?origin=${this.origin}&destination=${this.destination}`).then( 
+
+          const url = 'api/maps/directions'
+          const vehicleInfo = encodeURIComponent(JSON.stringify(this.vehicleInfo))
+
+          this.$api.get(`${url}?origin=${this.origin}&destination=${this.destination}&vehicleInfo=${vehicleInfo}`).then( 
             (res) => {
-                this.path = res.data
+                this.path = JSON.parse(res.data.coordinates)
+                this.distance = parseInt(res.data.distanceInMeters)
+                this.routeCo2 = parseInt(res.data.routeCo2InGrams)
             }
           )
         }

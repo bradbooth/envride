@@ -101,7 +101,10 @@ export default {
             let id = selection.value   
             axios
                 .get(`${url}/vehicle/${id}`)
-                .then(response => (this.selection.data = JSON.stringify(response.data, null, 2)))
+                .then(response => {
+                    this.selection.data = response.data
+                    this.$emit('vehicle-selected', this.selection.data)    
+                })
         }
     },
 

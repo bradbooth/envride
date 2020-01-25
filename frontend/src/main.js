@@ -4,7 +4,6 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-
 import axios from 'axios'
 import * as VueGoogleMaps from 'vue2-google-maps'
 
@@ -20,7 +19,7 @@ Vue.use({
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: process.env.GOOGLE_MAPS_API_KEY,
+    key: process.env.GOOGLE_MAPS_API_KEY_FRONTEND,
     libraries: 'places', // This is required if you use the Autocomplete plugin
     // OR: libraries: 'places,drawing'
     // OR: libraries: 'places,drawing,visualization'
