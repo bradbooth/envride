@@ -5,20 +5,32 @@ import './App.css';
 import { connect } from "react-redux";
 
 export class App extends Component {
+  
+  static defaultProps = {
+    center: {
+      lat: 43.71,
+      lng: -79.51
+    },
+    zoom: 11
+  }
 
   componentDidMount(){
-    console.log( 'env', process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
+    console.log(process.env)
   }
 
   render() {
     return (
-      <div style={{ height: '100vh', width: '100%' }} className="App">
+      <div className="App">
+
+      <div className="OptionsContainer">
+        Options container
+      </div>
+
        <GoogleMapReact
           bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
         >
-
         </GoogleMapReact>
       </div>
     );
