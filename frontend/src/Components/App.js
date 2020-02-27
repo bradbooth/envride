@@ -1,38 +1,29 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import GoogleMapReact from 'google-map-react';
 import './App.css';
 
 import { connect } from "react-redux";
-import { updateTest } from "../Redux/Actions/Test"
 
 export class App extends Component {
 
-
   componentDidMount(){
-    this.props.updateTest("Sent to redux store")
+    console.log( 'env', process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
   }
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>Redux "test": {this.props.test}</p>
-        </header>
+      <div style={{ height: '100vh', width: '100%' }} className="App">
+       <GoogleMapReact
+          bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
+          defaultCenter={this.props.center}
+          defaultZoom={this.props.zoom}
+        >
+
+        </GoogleMapReact>
       </div>
     );
   }
 
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  updateTest: (value) => dispatch(updateTest(value)),
-});
-
-const mapStateToProps = state => {
-  return { 
-    test: state.testStore.test
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect()(App);

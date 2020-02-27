@@ -6,11 +6,11 @@ WORKDIR /app
 COPY ./package*.json ./
 
 ARG GOOGLE_MAPS_API_KEY
-ENV GOOGLE_MAPS_API_KEY $GOOGLE_MAPS_API_KEY
+ENV REACT_APP_GOOGLE_MAPS_API_KEY $GOOGLE_MAPS_API_KEY
 
 RUN npm install
 COPY ./ .
-RUN npm build
+RUN npm run-script build
 
 FROM nginx as production-stage
 
