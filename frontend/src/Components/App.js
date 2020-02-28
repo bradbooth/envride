@@ -3,6 +3,8 @@ import GoogleMapReact from 'google-map-react';
 import axios from 'axios';
 import './App.css';
 
+import { Button, Input } from "reactstrap";
+
 import { connect } from "react-redux";
 
 export class App extends Component {
@@ -55,7 +57,7 @@ export class App extends Component {
       <div className="OptionsContainer">
         Options and stuff will go here
 
-        <input 
+        <Input 
           type="text"
           id="origin"
           placeholder="origin"
@@ -63,14 +65,14 @@ export class App extends Component {
           onChange={this.setOrigin}
         />
 
-        <input 
+        <Input
           type="text"
           id="destination"
           placeholder="destination"
           value={this.state.destination}
           onChange={this.setDestination}
         />
-        <button onClick={ this.getDirections }>Directions</button>
+        <Button onClick={ this.getDirections }>Directions</Button>
 
 
       </div>
