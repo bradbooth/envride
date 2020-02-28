@@ -3,7 +3,7 @@ import GoogleMapReact from 'google-map-react';
 import axios from 'axios';
 import './App.css';
 
-import { Button, Input } from "reactstrap";
+import { Button, Input, Spinner } from "reactstrap";
 
 import { connect } from "react-redux";
 
@@ -25,7 +25,8 @@ export class App extends Component {
         zoom: 11
       },
       origin: '',
-      destination: ''
+      destination: '',
+      loading: false
     };
   }
 
@@ -36,6 +37,7 @@ export class App extends Component {
   }
 
   getDirections = () => {
+    this.setState({ loading: true })
     console.log(`/api/maps/directions?origin=${this.state.origin}&destination=${this.state.destination}`)
     axios.get(`/api/maps/directions?origin=${this.state.origin}&destination=${this.state.destination}`)
       .then( res => {
@@ -44,6 +46,7 @@ export class App extends Component {
           path: coordinates
         });
         routePolyline.setMap(this.state.google.map);
+        this.setState({ loading: false })
       })
   }
 
@@ -73,7 +76,7 @@ export class App extends Component {
           onChange={this.setDestination}
         />
         <Button onClick={ this.getDirections }>Directions</Button>
-
+        { this.state.loading && <Spinner color="success"/> }
 
       </div>
 

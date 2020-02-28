@@ -11,6 +11,6 @@
   padding: 20px;
   z-index: 9999;
   background-color: white;
-  border-radius: 25px;
+  border-radius: 0px 25px 25px 0px;
   box-shadow: #b1abab 1px 1px 20px 3px;
 }
