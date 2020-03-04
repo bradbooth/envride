@@ -24,13 +24,3 @@ services:
         GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY_BACKEND}
     expose:
       - "8090"
-
-  otherapp:
-    container_name: otherapp
-    image: envrideRegistry.azurecr.io/otherapp:latest
-    restart: always
-    build:
-      context: ./otherapp-service
-      dockerfile: ./Dockerfile
-    expose:
-      - "8091"
