@@ -11,8 +11,6 @@ export class VehicleSelect extends Component {
 
     this.state = {
         dropdownOpen: false,
-        label: '',
-        values: []
     };
   }
 
@@ -29,11 +27,22 @@ export class VehicleSelect extends Component {
   render() {
     return (
       <div>
-        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-            <DropdownToggle caret>
-            {this.props.label }
+        <Dropdown
+          className="vehicle-dropdown"
+          isOpen={this.state.dropdownOpen} 
+          toggle={this.toggle}
+          disabled={this.props.values.length === 0} 
+        >
+            <DropdownToggle 
+              caret
+              disabled={this.props.values.length === 0} 
+            >
+            { this.props.label }
             </DropdownToggle>
-            <DropdownMenu className="vehicle-select-dropdown">
+            <DropdownMenu 
+              className="vehicle-dropdown-select"
+              >
+
             {
                 this.props.values.map(x => (
                     <DropdownItem 

@@ -1,5 +1,18 @@
-.vehicle-select-dropdown {
+.vehicle-dropdown {
+    margin: 5px;
+}
+
+.vehicle-dropdown-select {
     max-height: 400px ;
     overflow: auto ;
     transform: none;
+}
+
+.btn.disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.btn.disabled {
+    color: #d4d4d4 !important;
 }
