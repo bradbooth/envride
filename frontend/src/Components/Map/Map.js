@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 import axios from 'axios';
-
 import { connect } from "react-redux";
+import './Map.css'
 
 export class Map extends Component {
   
@@ -20,8 +20,7 @@ export class Map extends Component {
           lng: -79.51
         },
         zoom: 11
-      },
-      loading: false
+      }
     };
   }
 
@@ -54,15 +53,13 @@ export class Map extends Component {
       })
   }
 
-  setOrigin = (e) => { this.setState({ origin: e.target.value })}
-  setDestination = (e) => { this.setState({ destination: e.target.value })}
-
   render() {
     return (
-      <div className="App">
+      <div className="map-container">
 
         <GoogleMapReact
           bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
+          options={{ gestureHandling: "greedy" }}
           defaultCenter={this.state.mapConfig.center}
           defaultZoom={this.state.mapConfig.zoom}
           yesIWantToUseGoogleMapApiInternals={true}

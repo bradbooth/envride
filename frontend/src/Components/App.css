@@ -1,13 +1,7 @@
-.App {
-  height: 100vh;
-  width: 100%;
-}
-
 .OptionsContainer {
   position: absolute;
   width: 20%;
   min-width: 250px;
-  height: 80vh;
   margin-top: 5%;
   padding: 20px;
   z-index: 9999;
