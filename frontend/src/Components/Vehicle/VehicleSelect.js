@@ -84,12 +84,17 @@ export class VehicleSelect extends Component {
     const URL = `https://www.fueleconomy.gov/ws/rest/vehicle/menu/${option}?year=${this.state.year}&make=${this.state.make}&model=${this.state.model}`
 
     console.log("URL:", URL)
+    this.props.loader(true)
     return axios
         .get(URL)
         .then(response => {
+            this.props.loader(false)
             if ( !response.data ) return []
             const values = Array.isArray(response.data.menuItem) ? response.data.menuItem : [response.data.menuItem]
             return values
+        }).catch( err => {
+          console.log("ERR:" + err)
+          this.props.loader(false)
         })
   }
 

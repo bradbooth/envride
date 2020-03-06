@@ -6,10 +6,6 @@ import { Map } from './Map/Map'
 import './App.css';
 
 export class App extends Component {
-  
-  static defaultProps = {
-
-  }
 
   constructor() {
     super();
@@ -39,7 +35,7 @@ export class App extends Component {
 
       <div className="OptionsContainer">
 
-        <VehicleSelect/>
+        <VehicleSelect loader={this.setLoader}/>
         <h6>Directions</h6>
         <Input
           className="options-directions-input"
