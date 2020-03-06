@@ -11,7 +11,6 @@ export class VehicleSelect extends Component {
     super();
 
     this.state = {
-        dropdownOpen: false,
         years: [],
         makes: [],
         models: [],
@@ -35,18 +34,13 @@ export class VehicleSelect extends Component {
 
   getMakes = () => {
     this.getValues('make').then( res => {
-        this.setState({
-          makes: res,
-
-        })
+        this.setState({ makes: res })
     })
   }
 
   getModels = () => {
       this.getValues('model').then( res => {
-        this.setState({ 
-          models: res,
-        })
+        this.setState({ models: res })
     })
   }
 
@@ -58,13 +52,14 @@ export class VehicleSelect extends Component {
 
   setYear   = (value) => { 
     this.setState({ 
-        year: value, 
-        makes:   [], make:   '',
-        models:  [], model:  '', 
-        options: [], option: ''
-      }, 
-      () => this.getMakes()
-    )}
+      year: value, 
+      makes:   [], make:   '',
+      models:  [], model:  '', 
+      options: [], option: ''
+    }, 
+    () => this.getMakes()
+  )}
+
   setMake   = (value) => { 
     this.setState({
       make: value,
@@ -101,7 +96,7 @@ export class VehicleSelect extends Component {
   render() {
     return (
       <div>
-        
+        <h6>Vehicle Selection</h6>
         <VehicleDropdown
             values={this.state.years}
             label={ this.state.year || "Year"}
@@ -121,7 +116,7 @@ export class VehicleSelect extends Component {
             values={this.state.options}
             label={ this.state.option || "Option"}
             set={this.setOption} />
-        
+
       </div>
     );
   }

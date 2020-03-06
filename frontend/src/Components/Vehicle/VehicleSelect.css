@@ -1,5 +1,12 @@
 .vehicle-dropdown {
+    width: 100%;
     margin: 5px;
+}
+
+.vehicle-dropdown-toggle {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .vehicle-dropdown-select {

@@ -33,16 +33,13 @@ export class VehicleSelect extends Component {
           toggle={this.toggle}
           disabled={this.props.values.length === 0} 
         >
-            <DropdownToggle 
+            <DropdownToggle
+              className="vehicle-dropdown-toggle" 
               caret
-              disabled={this.props.values.length === 0} 
-            >
+              disabled={this.props.values.length === 0} >
             { this.props.label }
             </DropdownToggle>
-            <DropdownMenu 
-              className="vehicle-dropdown-select"
-              >
-
+            <DropdownMenu className="vehicle-dropdown-select">
             {
                 this.props.values.map(x => (
                     <DropdownItem 

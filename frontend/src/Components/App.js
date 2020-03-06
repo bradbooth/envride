@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import GoogleMapReact from 'google-map-react';
-import axios from 'axios';
-import './App.css';
-
 import { Button, Input, Spinner } from "reactstrap";
-
 import { connect } from "react-redux";
 import { VehicleSelect } from './Vehicle/VehicleSelect';
+import { Map } from './Map/Map'
+import './App.css';
 
 export class App extends Component {
   
@@ -16,54 +13,36 @@ export class App extends Component {
 
   constructor() {
     super();
-
     this.state = {
-      mapConfig: {
-        center: {
-          lat: 43.71,
-          lng: -79.51
-        },
-        zoom: 11
-      },
       origin: '',
       destination: '',
       loading: false
-    };
-  }
-
-  setMap = (google) => {
-    this.setState({
-      google
-    })
-  }
-
-  getDirections = () => {
-    this.setState({ loading: true })
-    console.log(`/api/maps/directions?origin=${this.state.origin}&destination=${this.state.destination}`)
-    axios.get(`/api/maps/directions?origin=${this.state.origin}&destination=${this.state.destination}`)
-      .then( res => {
-        const coordinates = res.data
-        const routePolyline = new this.state.google.maps.Polyline({
-          path: coordinates
-        });
-        routePolyline.setMap(this.state.google.map);
-        this.setState({ loading: false })
-      })
+     }
   }
 
   setOrigin = (e) => { this.setState({ origin: e.target.value })}
   setDestination = (e) => { this.setState({ destination: e.target.value })}
+  setLoader = (val) => { this.setState({ loading: val })}
+
+  getDirections = () => {
+    if ( this.state.origin && this.state.destination ){
+      this.refs.map.getDirections({
+        origin: this.state.origin,
+        destination: this.state.destination
+      })
+    }
+  }
 
   render() {
     return (
       <div className="App">
 
       <div className="OptionsContainer">
-        Options and stuff will go here
 
         <VehicleSelect/>
-
-        <Input 
+        <h6>Directions</h6>
+        <Input
+          className="options-directions-input"
           type="text"
           id="origin"
           placeholder="origin"
@@ -72,25 +51,28 @@ export class App extends Component {
         />
 
         <Input
+          className="options-directions-input"
           type="text"
           id="destination"
           placeholder="destination"
           value={this.state.destination}
           onChange={this.setDestination}
         />
-        <Button onClick={ this.getDirections }>Directions</Button>
-        { this.state.loading && <Spinner color="success"/> }
 
+      <Button
+        className="options-directions-button"
+        onClick={ this.getDirections }
+        disabled={ !this.state.origin || !this.state.destination }
+      >
+        Directions
+      </Button>
+
+        { this.state.loading && <Spinner color="success"/> }
       </div>
 
-        <GoogleMapReact
-          // bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
-          defaultCenter={this.state.mapConfig.center}
-          defaultZoom={this.state.mapConfig.zoom}
-          yesIWantToUseGoogleMapApiInternals={true}
-          onGoogleApiLoaded={ this.setMap }
-        >
-        </GoogleMapReact>
+        <Map 
+          ref="map"
+          loader={this.setLoader}/>
       </div>
     );
   }
