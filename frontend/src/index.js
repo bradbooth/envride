@@ -9,7 +9,6 @@ import store from './Redux/Store'
 import AppRouter from './Router/AppRouter'
 
 // Argon - https://demos.creative-tim.com/argon-dashboard-react/#/documentation/overview
-import "./assets/vendor/nucleo/css/nucleo.css";
 import "./assets/vendor/font-awesome/css/font-awesome.min.css";
 import "./assets/scss/argon-design-system-react.scss";
 

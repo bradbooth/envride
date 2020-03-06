@@ -6,6 +6,7 @@ import './App.css';
 import { Button, Input, Spinner } from "reactstrap";
 
 import { connect } from "react-redux";
+import { VehicleSelect } from './Vehicle/VehicleSelect';
 
 export class App extends Component {
   
@@ -60,6 +61,8 @@ export class App extends Component {
       <div className="OptionsContainer">
         Options and stuff will go here
 
+        <VehicleSelect/>
+
         <Input 
           type="text"
           id="origin"
@@ -81,7 +84,7 @@ export class App extends Component {
       </div>
 
         <GoogleMapReact
-          bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
+          // bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
           defaultCenter={this.state.mapConfig.center}
           defaultZoom={this.state.mapConfig.zoom}
           yesIWantToUseGoogleMapApiInternals={true}
