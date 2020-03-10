@@ -35,7 +35,7 @@ export class Options extends Component {
           className="options-directions-input"
           type="text"
           id="origin"
-          placeholder="origin"
+          placeholder="Origin"
           value={this.state.origin}
           onChange={this.setOrigin}
         />
@@ -43,7 +43,7 @@ export class Options extends Component {
           className="options-directions-input"
           type="text"
           id="destination"
-          placeholder="destination"
+          placeholder="Destination"
           value={this.state.destination}
           onChange={this.setDestination}
         />

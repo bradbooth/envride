@@ -20,7 +20,8 @@ export class Map extends Component {
           lng: -79.51
         },
         zoom: 11
-      }
+      },
+      polyline: null
     };
   }
 
@@ -28,6 +29,23 @@ export class Map extends Component {
     this.setState({
       google
     })
+  }
+
+
+  animateRoute = (polyline, coordinates) => {
+    for( let i=0; i<coordinates.length; i++){
+      setTimeout(() => {
+        const lat = coordinates[i].lat
+        const lng = coordinates[i].lng
+        this.state.polyline.getPath().push(new this.state.google.maps.LatLng(lat, lng))
+      }, 5*i);
+    }
+  }
+
+  clearRoute = () => {
+    if ( this.state.polyline ){
+      this.state.polyline.setMap(null)
+    }
   }
 
   getDirections = (locations) => {
@@ -39,12 +57,19 @@ export class Map extends Component {
       .then( res => {
         const coordinates = res.data
         const routePolyline = new this.state.google.maps.Polyline({
-          path: coordinates,
+          path: [],
+          map: this.state.google.map,
           strokeColor: '#149400',
           strokeOpacity: 1.0,
           strokeWeight: 3
         });
-        routePolyline.setMap(this.state.google.map);
+
+        this.clearRoute()
+        this.setState({
+          polyline: routePolyline
+        }, () => {
+          this.animateRoute(routePolyline, coordinates)
+        })
         this.props.loader(false)
 
       }).catch( err => {
@@ -54,12 +79,17 @@ export class Map extends Component {
   }
 
   render() {
+
+    const options ={
+      gestureHandling: "greedy" // Always take scroll focus on mouse hover
+    }
+
     return (
       <div className="map-container">
 
         <GoogleMapReact
           bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
-          options={{ gestureHandling: "greedy" }}
+          options={options}
           defaultCenter={this.state.mapConfig.center}
           defaultZoom={this.state.mapConfig.zoom}
           yesIWantToUseGoogleMapApiInternals={true}
