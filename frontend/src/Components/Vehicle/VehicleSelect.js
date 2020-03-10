@@ -39,15 +39,15 @@ export class VehicleSelect extends Component {
   }
 
   getModels = () => {
-      this.getValues('model').then( res => {
-        this.setState({ models: res })
+    this.getValues('model').then( res => {
+      this.setState({ models: res })
     })
   }
 
   getOptions = () => {
       this.getValues('options').then( res => {
         this.setState({ options: res })
-    })
+      })
   }
 
   setYear   = (value) => { 
@@ -77,7 +77,18 @@ export class VehicleSelect extends Component {
     () => this.getOptions()
   )}
 
-  setOption = (value) => { this.setState({ option: value}) }
+  setOption = (value) => { 
+    this.setState({ 
+      option: value,
+      optionID: this.state.options.find(opt => opt.text === value)
+    },
+    () => {
+      axios
+        .get(`https://www.fueleconomy.gov/ws/rest/vehicle/${this.state.optionID.value}`)
+        .then( res => console.log(res))
+        .catch ( err => console.log("ERR:", err))
+    }
+  )}
 
 
   getValues = (option) => {
