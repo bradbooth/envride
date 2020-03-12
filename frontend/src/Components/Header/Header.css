@@ -1,0 +1,19 @@
+.header {
+    z-index: 999;
+    box-shadow: #b1abab 1px 1px 20px 3px;
+}
+
+.nav-links-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.nav-links {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.nav-link {
+    padding: 10px !important;
+}

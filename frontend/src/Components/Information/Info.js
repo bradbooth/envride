@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Col, Table } from "reactstrap";
 import { connect } from "react-redux";
 import Chart from "./Chart"
+import Equal from "./Equal"
 import './Info.css'
 
 export class Info extends Component {
@@ -17,15 +18,17 @@ export class Info extends Component {
     return (
       <div className="info">
         <Container className="info-container">
+          <Equal />
+        </Container>
+        <Container className="info-container">
           <Row>
-            
             <Col>
-              <h1>Information</h1>
+              <h1>Community Statistics</h1>
               <p>Here we can display information such as the community charts</p>
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col xs={12} md={6}>
               <Chart />
             </Col>
             <Col>
@@ -58,6 +61,7 @@ export class Info extends Component {
             </Col>
           </Row>
         </Container>
+
       </div>
     );
   }

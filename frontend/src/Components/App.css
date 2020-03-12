@@ -4,13 +4,13 @@
   min-width: 250px;
   margin-top: 5%;
   padding: 20px;
-  z-index: 9999;
+  z-index: 999;
   background-color: white;
   border-radius: 0px 25px 25px 0px;
   box-shadow: #b1abab 1px 1px 20px 3px;
 }
 
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+@media only screen and (min-device-width : 1px) and (max-device-width : 480px) {
   /* Styles */
   .OptionsContainer {
     position: relative;
@@ -22,7 +22,7 @@
     z-index: 9999;
     background-color: white;
     border-radius: 0px 0px 25px 25px;
-    box-shadow: #b1abab 1px 1px 20px 3px;
+    box-shadow: #b1abab 0px 20px 17px -2px;  
   }
 }
 
