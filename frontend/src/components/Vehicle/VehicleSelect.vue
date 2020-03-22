@@ -97,11 +97,13 @@ export default {
             this.selection.option = option
             console.log("Option changed", option)
             
-            let selection = this.vehicles.options.find( x => x.text == option)
-            let id = selection.value   
+            let selection = this.vehicles.options.find(x => x.text == option)
+            let id = selection.value
             axios
                 .get(`${url}/vehicle/${id}`)
                 .then(response => (this.selection.data = JSON.stringify(response.data, null, 2)))
+                .then(response => (console.log(JSON.parse(response)['co2']))) //got the co2 emission for the vehicle
+            
         }
     },
 
