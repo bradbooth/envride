@@ -5,6 +5,7 @@
         v-on:update-search="updateOrigin"
         :placeholder="'Origin'" 
       />
+
       <Search 
         class="search-from" 
         v-on:update-search="updateDestination"
@@ -16,6 +17,19 @@
         @click="search"
       >
         Search
+      </button>
+      
+      <label class="distance">
+              {{  showDistance }}
+      </label>
+
+      
+      
+      <button 
+        class="calc-button"
+        @click="calculate"
+      >
+        Calculate
       </button>
 
       <GmapMap
@@ -57,7 +71,8 @@ export default {
         streetViewControl: false,
         mapTypeControl: false,
         styles: mapStyle
-      }
+      },
+      distance: ""
     }
   },
   methods: {
@@ -77,6 +92,22 @@ export default {
             }
           )
         }
+      },
+
+      showDistance(){
+        if ( this.origin && this.destination ){
+          this.$api.get(`api/maps/distance/?origin=${this.origin}&destination=${this.destination}`).then( 
+            (res) => {this.distance = res.data}
+          )
+        }
+      },
+
+      calculate(){
+        if (this.distance){
+          this.$api.get(`api/maps/co2/?dist=${this.distance}`).then( 
+            (res) => {console.log(res.data)}
+          )
+        }
       }
   }
 }
@@ -86,6 +117,12 @@ export default {
 <style scoped>
 
   .search-button {
+    width: 100px;
+    height: 30px;
+    margin: 10px;
+  }
+
+  .calc-button {
     width: 100px;
     height: 30px;
     margin: 10px;
