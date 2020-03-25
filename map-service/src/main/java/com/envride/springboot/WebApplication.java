@@ -71,7 +71,7 @@ public class WebApplication {
 
 	@CrossOrigin()
 	@RequestMapping("/distance")
-	public static long getDistance(@RequestParam String origin, @RequestParam String destination){
+	public static double getDistance(@RequestParam String origin, @RequestParam String destination){
 
 		GeoApiContext context = new GeoApiContext.Builder()
 												 .apiKey(System.getenv("GOOGLE_MAPS_API_KEY"))
@@ -83,7 +83,7 @@ public class WebApplication {
 		apiRequest.mode(TravelMode.DRIVING);
 
 		DistanceMatrix res;
-		long distApart;
+		double distApart;
 
 		try {
 
@@ -107,28 +107,30 @@ public class WebApplication {
 
 	@CrossOrigin()
 	@RequestMapping("/co2")
-	public static long getCO2(@RequestParam long dist){
+	public static double getCO2(@RequestParam double dist){
 		//get co2 from front end
-		long distInMiles = dist/1.6;
-		//return co2*distInMiles;
+		
+		double distInMiles = dist/1.6;
+		
+		return distInMiles;//*co2;
 	}
 
-	public static String whichClient(long co2A, long co2B, String originA, String originB, String dest){
+	public static String whichClient(double co2A, double co2B, String originA, String originB, String dest){
 		String out = "B";
 
 		//get the distance from A to B to destination
-		long distABdest = getDistance(originA, originB);
-		distABdest += getDistance(originB, destination);
+		double distABdest = getDistance(originA, originB);
+		distABdest += getDistance(originB, dest);
 
 		//get the distance from B to A to destination
-		long distBAdest = getDistance(originB, originA);
-		distBAdest += getDistance(originA, destination);
+		double distBAdest = getDistance(originB, originA);
+		distBAdest += getDistance(originA, dest);
 		
 		//get co2 emission for the distance from A to B to destination using A's vehicle
-		double curCO2A = distABdest/1.6 *co2A;
+		double curCO2A = (distABdest/1.6) *co2A;
 
 		//get co2 emission for the distance from B to A to destination using B's vehicle
-		double curCO2B = distBAdest/1.6 *co2B;
+		double curCO2B = (distBAdest/1.6) *co2B;
 
 		//initialize the co2 emission to be used and then decide on which one by comparing the two of them
 		//once decided, the returned client is chosen (only changed if A is the more efficient client)
@@ -141,10 +143,10 @@ public class WebApplication {
 		//this is for calculating whether it is more efficient for both clients to go separately
 
 		//get the distance from A to destination
-		long distA = getDistance(originA, dest);
+		double distA = getDistance(originA, dest);
 
 		//get the distance from B to destination
-		long distB = getDistance(originB, dest);
+		double distB = getDistance(originB, dest);
 
 		//total co2 emissions given off by this option
 		double sumCo2 = (distA/1.6 *co2A) + (distB/1.6 *co2B);
