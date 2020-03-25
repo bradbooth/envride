@@ -125,14 +125,14 @@ public class WebApplication {
 		distBAdest += getDistance(originA, destination);
 		
 		//get co2 emission for the distance from A to B to destination using A's vehicle
-		long curCO2A = distABdest/1.6 *co2A;
+		double curCO2A = distABdest/1.6 *co2A;
 
 		//get co2 emission for the distance from B to A to destination using B's vehicle
-		long curCO2B = distBAdest/1.6 *co2B;
+		double curCO2B = distBAdest/1.6 *co2B;
 
 		//initialize the co2 emission to be used and then decide on which one by comparing the two of them
 		//once decided, the returned client is chosen (only changed if A is the more efficient client)
-		long co2Used = curCO2B;
+		double co2Used = curCO2B;
 		if (curCO2A < curCO2B){
 			co2Used = curCO2A;
 			out = "A";
@@ -147,7 +147,7 @@ public class WebApplication {
 		long distB = getDistance(originB, dest);
 
 		//total co2 emissions given off by this option
-		long sumCo2 = (distA/1.6 *co2A) + (distB/1.6 *co2B);
+		double sumCo2 = (distA/1.6 *co2A) + (distB/1.6 *co2B);
 
 		//decide on whether this is the better option
 		if (sumCo2 < co2Used) out = "separate";
