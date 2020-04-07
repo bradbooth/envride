@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 import axios from 'axios';
 import { connect } from "react-redux";
+import { updateDistance } from '../../Redux/Actions/Data'
 import './Map.css'
 
 export class Map extends Component {
-  
+  map = React.createRef();
+
   static defaultProps = {
 
   }
@@ -35,8 +37,9 @@ export class Map extends Component {
   animateRoute = (polyline, coordinates) => {
     for( let i=0; i<coordinates.length; i++){
       setTimeout(() => {
-        const lat = coordinates[i].lat
-        const lng = coordinates[i].lng
+        const coords = coordinates[i].split(',')
+        const lat = coords[0]
+        const lng = coords[1]
         this.state.polyline.getPath().push(new this.state.google.maps.LatLng(lat, lng))
       }, 5*i);
     }
@@ -51,11 +54,19 @@ export class Map extends Component {
   getDirections = (locations) => {
     this.props.loader(true)
 
-    const URL = `/api/maps/directions?origin=${locations.origin}&destination=${locations.destination}`
+    const URL = `/api/maps/directions`
 
-    axios.get(URL)
+    axios.get(URL, {
+      params: {
+        origin1: locations.origin1,
+        origin2: locations.origin2,
+        destination: locations.destination,
+        co2: this.props.vehicleData.co2TailpipeGpm
+      }
+    })
       .then( res => {
-        const coordinates = res.data
+        this.props.updateDistance(res.data.distanceInMeters)
+        const coordinates = res.data.coordinates
         const routePolyline = new this.state.google.maps.Polyline({
           path: [],
           map: this.state.google.map,
@@ -102,4 +113,12 @@ export class Map extends Component {
 
 }
 
-export default connect()(Map);
+const mapDispatchToProps = (dispatch) => ({
+  updateDistance: (distance) => dispatch(updateDistance(distance))
+});
+
+const mapStateToProps = state => ({
+  vehicleData: state.data.co2
+});
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Map);

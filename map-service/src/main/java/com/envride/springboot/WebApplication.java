@@ -2,15 +2,14 @@ package com.envride.springboot;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
-import com.google.maps.model.DirectionsResult;
-import com.google.maps.model.LatLng;
-import com.google.maps.model.TravelMode;
+import com.google.maps.model.*;
 import com.google.maps.DistanceMatrixApiRequest;
-import com.google.maps.model.DistanceMatrix;
 import com.google.maps.DistanceMatrixApi;
 
 import org.springframework.boot.SpringApplication;
@@ -38,32 +37,56 @@ public class WebApplication {
 
 	@CrossOrigin()
 	@RequestMapping("/directions")
-	public static String getDirections(@RequestParam String origin, @RequestParam String destination) {
+	public static String getDirections(
+		@RequestParam String origin1, 
+		@RequestParam String origin2,
+		@RequestParam String destination,
+		@RequestParam Double co2
+	) {
 
 		GeoApiContext context = new GeoApiContext.Builder()
-												 .apiKey(System.getenv("GOOGLE_MAPS_API_KEY"))
-												 .build();
+										.apiKey(System.getenv("GOOGLE_MAPS_API_KEY"))
+										.build();
 
-		DirectionsApiRequest apiRequest = DirectionsApi.newRequest(context);
-		apiRequest.origin(origin);
-		apiRequest.destination(destination);
-		apiRequest.mode(TravelMode.DRIVING);
+		String[] route = whichClient(0,0,origin1, origin2, destination);
 
-		DirectionsResult response;
-		try {
+		if ( route == null ){
+			System.out.println("Better to travel separately");
+		} else {
 
-			response = apiRequest.await();
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			List<LatLng> pathPoints = response.routes[0].overviewPolyline.decodePath();
-			System.out.println(gson.toJson(pathPoints));
-			return gson.toJson(pathPoints);
+			DirectionsApiRequest apiRequest = DirectionsApi.newRequest(context);
+			apiRequest.origin(route[0]);
+			apiRequest.waypoints(route[1]);
+			apiRequest.destination(destination);
+			apiRequest.mode(TravelMode.DRIVING);
+			DirectionsResult response;
+			try {
 
-		} catch (ApiException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+				response = apiRequest.await();
+				DirectionsRoute firstRoute = response.routes[0];
+				List<LatLng> pathPoints = firstRoute.overviewPolyline.decodePath();
+				float distanceInMeters = firstRoute.legs[0].distance.inMeters;
+				
+				// Build response to be sent back
+				Gson gson = new GsonBuilder().setPrettyPrinting().create();
+				JsonObject builtResponse = new JsonObject();
+				builtResponse.addProperty("distanceInMeters", distanceInMeters);
+				builtResponse.addProperty("routeCo2InGrams", getRouteCO2(co2, distanceInMeters));
+
+				JsonArray coordinates = new JsonArray();
+				for ( LatLng coord : pathPoints ){
+					coordinates.add(coord.toString());
+				}
+				builtResponse.add("coordinates", coordinates);
+				return gson.toJson(builtResponse);
+
+			} catch (ApiException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return "Error: Unable to retrieve directions";
@@ -104,19 +127,19 @@ public class WebApplication {
 
 	}
 
-
-	@CrossOrigin()
-	@RequestMapping("/co2")
-	public static double getCO2(@RequestParam double dist){
-		//get co2 from front end
-		
-		double distInMiles = dist/1.6;
-		
-		return distInMiles;//*co2;
+	private static double metersToMiles(float meters){
+		return meters / 1609;
 	}
 
-	public static String whichClient(double co2A, double co2B, String originA, String originB, String dest){
-		String out = "B";
+	private static String getRouteCO2(Double co2TailpipeGpm, float distanceInMeters){
+		// Convert
+		double distanceInMiles = metersToMiles(distanceInMeters);
+		double co2GTotal = co2TailpipeGpm * distanceInMiles;
+		return String.valueOf(co2GTotal);
+	}
+
+	public static String[] whichClient(double co2A, double co2B, String originA, String originB, String dest){
+		String[] out = { originB, originA, dest };
 
 		//get the distance from A to B to destination
 		double distABdest = getDistance(originA, originB);
@@ -137,7 +160,7 @@ public class WebApplication {
 		double co2Used = curCO2B;
 		if (curCO2A < curCO2B){
 			co2Used = curCO2A;
-			out = "A";
+			out = new String[]{ originA, originB, dest };
 		}
 
 		//this is for calculating whether it is more efficient for both clients to go separately
@@ -152,7 +175,7 @@ public class WebApplication {
 		double sumCo2 = (distA/1.6 *co2A) + (distB/1.6 *co2B);
 
 		//decide on whether this is the better option
-		if (sumCo2 < co2Used) out = "separate";
+		if (sumCo2 < co2Used) out = null;
 		
 		//return the chosen option (A, B, separate)
 		return out;

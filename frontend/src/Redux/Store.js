@@ -1,9 +1,9 @@
 import { createStore, combineReducers } from "redux";
-import testStore from "./Reducers/Test"
+import data from "./Reducers/Test"
 
 export default createStore(
     combineReducers({
-        testStore
+        data
     }),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );

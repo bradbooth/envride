@@ -17,8 +17,11 @@ export class Info extends Component {
   render() {
     return (
       <div className="info">
+
         <Container className="info-container">
-          <Equal />
+          <Col>
+            <Equal />
+          </Col>
         </Container>
         <Container className="info-container">
           <Row>

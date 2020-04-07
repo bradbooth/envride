@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { Map } from './Map/Map'
+import Map from './Map/Map'
 import './App.css';
 import { Info } from './Information/Info';
 import { Options } from './Options';
@@ -18,10 +18,11 @@ export class App extends Component {
   // Pass loader onto the options container
   setLoader = (val) => { this.refs.options.setLoader(val) }
 
-  getDirections = (origin, destination) => {
+  getDirections = (origin1, origin2, destination) => {
     if ( origin && destination ){
       this.refs.map.getDirections({
-        origin,
+        origin1,
+        origin2,
         destination
       })
     }

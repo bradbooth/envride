@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './VehicleSelect.css'
 import axios from 'axios';
-
+import { updateCO2 } from '../../Redux/Actions/Data'
 import { connect } from "react-redux";
 import VehicleDropdown from './VehicleDropdown';
 
@@ -85,7 +85,10 @@ export class VehicleSelect extends Component {
     () => {
       axios
         .get(`https://www.fueleconomy.gov/ws/rest/vehicle/${this.state.optionID.value}`)
-        .then( res => console.log(res))
+        .then( res => {
+          console.log(res)
+          this.props.updateData(res.data)
+        })
         .catch ( err => console.log("ERR:", err))
     }
   )}
@@ -139,4 +142,8 @@ export class VehicleSelect extends Component {
 
 }
 
-export default connect()(VehicleSelect);
+const mapDispatchToProps = (dispatch) => ({
+  updateData: (data) => dispatch(updateCO2(data))
+});
+
+export default connect(null, mapDispatchToProps)(VehicleSelect);

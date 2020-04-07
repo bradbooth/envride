@@ -1,17 +1,23 @@
 import { 
-    TEST
+    CO2, DISTANCE
 } from "../Constants/ActionTypes";
 
 const initialState = {
-  test: ""
+  co2: "",
+  distance: 0
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case TEST:
+        case CO2:
             return {
                 ...state,
-                test: action.payload
+                co2: action.payload
+            }
+        case DISTANCE:
+            return {
+                ...state,
+                distance: action.payload
             }
         default:
             return state
